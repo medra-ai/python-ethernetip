@@ -1,9 +1,5 @@
 import sys
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+import setuptools
 
 package_name = 'ethernetip'
 description = 'Basic EtherNet/IP scanner'
@@ -13,22 +9,15 @@ requirements = ['dpkt']
 # PyPI Readme
 long_description = open('README.md').read()
 
-# Pull in the package
-package = __import__(package_name)
-package_version = package.__version__
-if "bdist_msi" in sys.argv:
-    # The MSI build target does not support a 4 digit version, e.g. '1.2.3.4'
-    # therefore we remove the last digit.
-    package_version, _, _ = package_version.rpartition('.')
-
-setup(name=package_name,
-      version=package_version,
-      author=package.__author__,
-      author_email=package.__author_email__,
-      url=package.__url__,
+setuptools.setup(name=package_name,
+      version="1.0.0",
+      author="Sebastian Block",
+      author_email="sebastian.block@world-wi.de",
+      url="https://codeberg.org/paperwork/python-ethernetip",
       description=description,
       long_description=long_description,
-      packages=['ethernetip'],
+      package_dir={"":"src"},
+      packages=setuptools.find_packages(where="src"),
       install_requires=requirements,
       license='MIT',
       zip_safe=False,

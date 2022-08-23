@@ -467,6 +467,12 @@ class EtherNetIP(object):
                                 else:
                                     bits[i] = False
                                 i += 1
+            else:
+                # We did not receive anything -> timeout
+                for inst in self.assembly:
+                    conn = self.assembly[inst][0]
+                    conn.stopProduce()
+                self.stopIO()
 
     def explicit_conn(self, ipaddr=None):
         if ipaddr is None:
@@ -959,3 +965,4 @@ class EtherNetIPExpConnection(EtherNetIPSession):
     def stopProduce(self):
         if self.prod_state == 1:
             self.prod_state = 0
+            self.prodsock.close()

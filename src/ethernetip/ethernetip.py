@@ -439,7 +439,9 @@ class EtherNetIP(object):
 
     def listenUDP(self):
         while 1 == self.io_state:
-            inp, out, err = select.select([self.udpsock], [], [], 2)
+            # Get max timeout in seconds
+            timeout = max([conn.toapi for conn in self.explicit]) * 0.001
+            inp, out, err = select.select([self.udpsock], [], [], timeout * 2)
             if len(inp) != 0:
                 try:
                     buf, addr = self.udpsock.recvfrom(1024)
@@ -468,10 +470,7 @@ class EtherNetIP(object):
                                     bits[i] = False
                                 i += 1
             else:
-                # We did not receive anything -> timeout
-                for inst in self.assembly:
-                    conn = self.assembly[inst][0]
-                    conn.stopProduce()
+                # We did not receive from any explicit connection -> timeout
                 self.stopIO()
 
     def explicit_conn(self, ipaddr=None):

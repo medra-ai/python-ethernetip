@@ -662,7 +662,7 @@ class EtherNetIPSession(EtherNetIPSocket):
                         rsppkt = self.unconnSendValidRsp(service, chkdata, context)
                         if str(rsppkt) != str(pkt):
                             print("Packets differ")
-                            assert(0)
+                            assert (0)
                     return ret
         return None
 
@@ -894,9 +894,9 @@ class EtherNetIPExpConnection(EtherNetIPSession):
             conn_serial_num = connection_serialno
         if fwdc is None:
             fwdc = ForwardCloseReq(conn_serial=conn_serial_num,
-                                mkpath=self.mkReqPath(clas=0x06, inst=0x01, attr=None),
-                                plen=plen,
-                                data=path)
+                                   mkpath=self.mkReqPath(clas=0x06, inst=0x01, attr=None),
+                                   plen=plen,
+                                   data=path)
         # add service field
         dsz = len(fwdc) + 1
         cpf2 = UnconnectedDataItem(type_id=CommandSpecificData.TYPE_ID_UNCONNECTED_MESSAGE,

@@ -1,7 +1,14 @@
 help:
+	@echo "nox - trigger nox build"
 	@echo "clean - remove all build/python artifacts"
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
+
+nox:
+	nox
+
+docs:
+	nox -s docs
 
 clean: clean-build clean-pyc
 
@@ -9,6 +16,7 @@ clean-build:
 	rm -fr build/
 	rm -fr dist/
 	rm -fr deb_dist/
+	rm -fr coverage-reports/
 	rm -fr *.egg-info
 	rm -fr *.tar.gz
 	rm -fr .tox

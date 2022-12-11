@@ -27,3 +27,8 @@ def coverage(session):
         pass
     session.run("coverage", "report")
 
+@nox.session(reuse_venv=True)
+def docs(session):
+    session.install(".")
+    session.install("sphinx")
+    session.run("sphinx-build", "-b", "html", "docs/source", "build/docs")

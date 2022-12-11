@@ -880,7 +880,8 @@ class EtherNetIPExpConnection(EtherNetIPSession):
                         return extended_status
         return None
 
-    def sendFwdCloseReq(self, inputinst, outputinst, configinst, path_class=0x04, connection_serialno=None):
+    def sendFwdCloseReq(self, inputinst, outputinst, configinst, path_class=0x04,
+                        connection_serialno=None, fwdc=None):
         path = struct.pack(">BBB", 0x20, path_class, 0x24) + struct.pack("B", configinst)
         if outputinst is not None:
             path += struct.pack("B", 0x2c) + struct.pack("B", outputinst)
@@ -891,10 +892,11 @@ class EtherNetIPExpConnection(EtherNetIPSession):
             conn_serial_num = self.conn_serial_num
         else:
             conn_serial_num = connection_serialno
-        fwdc = ForwardCloseReq(conn_serial=conn_serial_num,
-                               mkpath=self.mkReqPath(clas=0x06, inst=0x01, attr=None),
-                               plen=plen,
-                               data=path)
+        if fwdc is None:
+            fwdc = ForwardCloseReq(conn_serial=conn_serial_num,
+                                mkpath=self.mkReqPath(clas=0x06, inst=0x01, attr=None),
+                                plen=plen,
+                                data=path)
         # add service field
         dsz = len(fwdc) + 1
         cpf2 = UnconnectedDataItem(type_id=CommandSpecificData.TYPE_ID_UNCONNECTED_MESSAGE,

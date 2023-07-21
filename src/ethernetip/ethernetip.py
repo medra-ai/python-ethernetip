@@ -410,13 +410,13 @@ class EtherNetIP(object):
         self.ip = ip
 
     def registerAssembly(self, iotype, size, inst, conn):
-        if inst in self.assembly:
+        if (inst, conn) in self.assembly:
             print("Reg assembly failed for iotype=", iotype)
             return None
         bits = []
         for i in range(size * 8):
             bits.append(0)
-        self.assembly[inst] = (conn, iotype, bits)
+        self.assembly[(inst, conn)] = (conn, iotype, bits)
         if conn is not None:
             if iotype == EtherNetIP.ENIP_IO_TYPE_INPUT:
                 conn.mapIn(bits)

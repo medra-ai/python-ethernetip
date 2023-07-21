@@ -30,3 +30,8 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 
+upload_pypi:
+	python3 -m build
+	echo "Use username __token__ and the upload token as password starting with pypi-"
+	python3 -m twine upload dist/*
+

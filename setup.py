@@ -9,7 +9,7 @@ requirements = ['dpkt']
 long_description = open('README.md').read()
 
 setuptools.setup(name=package_name,
-                 version="1.0.0",
+                 version="1.1.0",
                  author="Sebastian Block",
                  author_email="sebastian.block@world-wi.de",
                  url="https://codeberg.org/paperwork/python-ethernetip",
@@ -29,4 +29,6 @@ setuptools.setup(name=package_name,
                               'Programming Language :: Python :: 3.6',
                               'Programming Language :: Python :: 3.7',
                               'Programming Language :: Python :: 3.8',
-                              'Programming Language :: Python :: 3.9'])
+                              'Programming Language :: Python :: 3.9',
+                              'Programming Language :: Python :: 3.10',
+                              'Programming Language :: Python :: 3.11'])

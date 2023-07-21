@@ -398,6 +398,12 @@ class EthernetIOThread(threading.Thread):
 
 
 class EtherNetIP(object):
+    """
+    EtherNet/IP class
+
+    :param ip: IP address of the device
+    :type ip: str
+    """
     ENIP_IO_TYPE_INPUT  = 0
     ENIP_IO_TYPE_OUTPUT = 1
 
@@ -410,6 +416,16 @@ class EtherNetIP(object):
         self.ip = ip
 
     def registerAssembly(self, iotype, size, inst, conn):
+        """
+        Register an assembly instance used to produce IO.
+
+        :param iotype: IO type to register (ENIP_IO_TYPE_INPUT/ENIP_IO_TYPE_OUTPUT)
+        :param size: size of the assembly in bytes
+        :param inst: instance of the assembly
+        :param conn: connection to use
+
+        :returns: array of bits with size of 8 times the size parameter
+        """
         if (inst, conn) in self.assembly:
             print("Reg assembly failed for iotype=", iotype)
             return None
@@ -425,6 +441,9 @@ class EtherNetIP(object):
         return bits
 
     def startIO(self):
+        """
+        Start produce IO
+        """
         if self.io_state == 0:
             self.udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.udpsock.bind(("0.0.0.0", ENIP_UDP_PORT))
@@ -433,11 +452,17 @@ class EtherNetIP(object):
             self.udpthread.start()
 
     def stopIO(self):
+        """
+        Stop producing IO
+        """
         if self.io_state == 1:
             self.io_state = 0
             self.udpsock.close()
 
     def listenUDP(self):
+        """
+        Function that is called from IO producing :class:`EthernetIOThread`
+        """
         while 1 == self.io_state:
             inp, out, err = select.select([self.udpsock], [], [], 2)
             if len(inp) != 0:
@@ -469,6 +494,12 @@ class EtherNetIP(object):
                                 i += 1
 
     def explicit_conn(self, ipaddr=None):
+        """
+        Create explicit connection
+
+        :param ipaddr: IP address used for the explicit connection
+        :type ipaddr: str, optional
+        """
         if ipaddr is None:
             ipaddr = self.ip
         exp = EtherNetIPExpConnection(ipaddr)
@@ -476,6 +507,13 @@ class EtherNetIP(object):
         return exp
 
     def listIDUDP(self, ipaddr=None, timeout=5):
+        """
+        Send ListIdentify requeset to ipaddr.
+
+        :param ipaddr: IP address to send ListIdentify request to
+        :param timeout: Timeout until answer needs to be received (default 5s)
+        :return: ListIdentify reply or None if no answer received within timeout.
+        """
         udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         context = random.randint(1, 4026531839)
@@ -498,6 +536,9 @@ class EtherNetIP(object):
 
 
 class EtherNetIPSocket(object):
+    """
+    Socket class
+    """
     def __init__(self, ip):
         self.ipaddr = ip
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

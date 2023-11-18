@@ -980,7 +980,7 @@ class EtherNetIPExpConnection(EtherNetIPSession):
                 output += struct.pack("B", val)
                 val = 0
 
-        pkt = UdpSendDataPacket(seq_num=self.seqnum, seq_count=self.seqnum,
+        pkt = UdpSendDataPacket(seq_num=self.seqnum, seq_count=self.seqnum & 0xffff,
                                 conn_id=self.otconnid,
                                 len_conn_data=int((len(self.outAssem) / 8) + 6),
                                 data=output)

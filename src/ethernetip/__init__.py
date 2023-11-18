@@ -7,7 +7,7 @@ __author__ = 'Sebastian Block'
 __author_email__ = 'sebastian.block@world-wi.de'
 __license__ = 'MIT'
 __url__ = 'https://codeberg.org/paperwork/python-ethernetip'
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 from .ethernetip import *
 

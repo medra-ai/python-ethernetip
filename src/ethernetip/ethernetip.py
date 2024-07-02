@@ -446,7 +446,7 @@ class EtherNetIP(object):
         """
         if self.io_state == 0:
             self.udpsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.udpsock.bind(("0.0.0.0", ENIP_UDP_PORT))
+            self.udpsock.connect(("0.0.0.0", ENIP_UDP_PORT))
             self.udpthread = EthernetIOThread(1, self)
             self.io_state = 1
             self.udpthread.start()

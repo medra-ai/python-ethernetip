@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import logging
 import random
 import select
 import socket
@@ -27,6 +28,9 @@ import struct
 import threading
 
 import dpkt
+
+
+logger = logging.getLogger(__name__)
 
 ENIP_TCP_PORT   = 44818
 ENIP_UDP_PORT   = 2222
@@ -466,7 +470,11 @@ class EtherNetIP(object):
         """
         while 1 == self.io_state:
             inp, out, err = select.select([self.udpsock], [], [], 2)
-            if len(inp) != 0:
+            if len(inp) == 0:
+                logger.warning("EthernetIOThread: no data received. Stopping IO.")
+                self.stopIO()
+                return
+            else:
                 try:
                     buf, addr = self.udpsock.recvfrom(1024)
                 except OSError:

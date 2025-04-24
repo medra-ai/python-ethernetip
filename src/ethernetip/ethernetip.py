@@ -419,7 +419,7 @@ class EtherNetIP(object):
         self.io_state  = 0
         self.ip = ip
 
-    def registerAssembly(self, iotype, size, inst, conn):
+    def registerAssembly(self, iotype, size, inst, conn, out_bits: list[int] | None = None):
         """
         Register an assembly instance used to produce IO.
 
@@ -427,6 +427,7 @@ class EtherNetIP(object):
         :param size: size of the assembly in bytes
         :param inst: instance of the assembly
         :param conn: connection to use
+        :param out_bits: if provided, output bits to use on initialization
 
         :returns: array of bits with size of 8 times the size parameter
         """
@@ -434,8 +435,11 @@ class EtherNetIP(object):
             print("Reg assembly failed for iotype=", iotype)
             return None
         bits = []
-        for i in range(size * 8):
-            bits.append(0)
+        if iotype == EtherNetIP.ENIP_IO_TYPE_OUTPUT and out_bits is not None:
+            bits = out_bits
+        else:
+            for i in range(size * 8):
+                bits.append(0)
         self.assembly[(inst, conn)] = (conn, iotype, bits)
         if conn is not None:
             if iotype == EtherNetIP.ENIP_IO_TYPE_INPUT:

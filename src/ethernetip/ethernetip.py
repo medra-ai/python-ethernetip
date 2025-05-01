@@ -506,7 +506,8 @@ class EtherNetIP(object):
                                 else:
                                     bits[i] = False
                                 i += 1
-                self.condvar.notify_all()
+                with self.condvar:
+                    self.condvar.notify_all()
 
     def explicit_conn(self, ipaddr=None):
         """

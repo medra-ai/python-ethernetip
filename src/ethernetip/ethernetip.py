@@ -418,6 +418,7 @@ class EtherNetIP(object):
         self.udpthread = None
         self.io_state  = 0
         self.ip = ip
+        self.condvar = threading.Condition()
 
     def registerAssembly(self, iotype, size, inst, conn, out_bits: list[int] | None = None):
         """
@@ -505,6 +506,8 @@ class EtherNetIP(object):
                                 else:
                                     bits[i] = False
                                 i += 1
+                with self.condvar:
+                    self.condvar.notify_all()
 
     def explicit_conn(self, ipaddr=None):
         """
